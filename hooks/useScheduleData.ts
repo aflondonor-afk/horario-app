@@ -10,7 +10,7 @@ export const useScheduleData = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('/data.csv');
+                const response = await fetch(`${import.meta.env.BASE_URL}data.csv`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }

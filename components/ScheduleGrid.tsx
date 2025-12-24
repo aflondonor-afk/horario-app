@@ -69,7 +69,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               columns.map((col) => (
                 <div
                   key={col.id}
-                  className={`flex-1 min-w-[25%] md:min-w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-1 md:px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
+                  className={`flex-none w-[25vw] md:w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-1 md:px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
                 >
                   <span className="text-white font-bold text-[10px] md:text-sm truncate w-full text-center">{col.title}</span>
                 </div>
@@ -96,9 +96,16 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
             <div className="h-10"></div>
           </div>
 
-          {/* Grid Background Lines & Content */}
-          <div className="flex flex-1 relative bg-background-dark">
-            {/* Current Time Line (Spanning all columns) */}
+          {/* Grid Area */}
+          <div className="relative bg-background-dark overflow-visible">
+            {/* Horizontal grid lines */}
+            <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
+              {hours.map((hour) => (
+                <div key={hour} className="border-b border-white/20 w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
+              ))}
+            </div>
+
+            {/* Current Time Line (Relative to columns area) */}
             {currentTimeMinutes >= startOffsetMinutes && currentTimeMinutes <= END_HOUR * 60 && (
               <div
                 className="absolute left-0 right-0 z-20 flex items-center pointer-events-none"
@@ -115,36 +122,32 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               </div>
             )}
 
-            {/* Horizontal grid lines */}
-            <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
-              {hours.map((hour) => (
-                <div key={hour} className="border-b border-border-green/20 w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
+            {/* Columns Container */}
+            <div className="flex flex-row relative z-10 min-h-full">
+              {columns.map((col) => (
+                <div
+                  key={col.id}
+                  className={`flex-none w-[25vw] md:w-[180px] border-r border-border-green/30 relative ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
+                >
+                  {events.filter(e => e.columnId === col.id).map(event => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      status={eventStatuses[event.id]}
+                      onClick={() => setSelectedEventId(event.id)}
+                      isAssistantMode={true}
+                    />
+                  ))}
+                </div>
               ))}
-            </div>
 
-            {/* Columns with Events */}
-            {columns.map((col) => (
-              <div
-                key={col.id}
-                className={`flex-1 min-w-[25%] md:min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
-              >
-                {events.filter(e => e.columnId === col.id).map(event => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    status={eventStatuses[event.id]}
-                    onClick={() => setSelectedEventId(event.id)}
-                    isAssistantMode={true} // Enable clicking to open modal
-                  />
-                ))}
-              </div>
-            ))}
-            {/* Empty state filler if no columns */}
-            {columns.length === 0 && (
-              <div className="w-full h-[800px] flex items-center justify-center text-text-muted/50 text-4xl font-bold uppercase select-none">
-                Sin Datos
-              </div>
-            )}
+              {/* Empty state filler if no columns */}
+              {columns.length === 0 && (
+                <div className="w-[100vw] h-[800px] flex items-center justify-center text-text-muted/50 text-4xl font-bold uppercase select-none">
+                  Sin Datos
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

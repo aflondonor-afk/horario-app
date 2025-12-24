@@ -56,13 +56,8 @@ const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onCl
         )}
       </div>
 
-      <div className="hidden md:flex items-center gap-1 text-text-muted text-[10px] mb-1">
-        <span className="font-mono bg-white/5 px-1 rounded text-[9px]">{event.startTime} - {event.endTime}</span>
-      </div>
-
       <div className="hidden md:flex items-center gap-1 text-text-muted text-[10px] mb-auto">
-        <span className="material-symbols-outlined text-[12px]">group</span>
-        <span className="truncate">{event.subtitle}</span>
+        <span className="font-mono bg-white/5 px-1 rounded text-[9px]">{event.startTime} - {event.endTime}</span>
       </div>
 
       <div className="hidden md:flex items-center gap-1.5 mt-1 pt-1 border-t border-white/5">

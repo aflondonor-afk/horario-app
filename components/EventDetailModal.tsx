@@ -64,15 +64,9 @@ const EventDetailModal: React.FC<EventDetailModalProps> = memo(({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="p-3 bg-background-dark/50 rounded-2xl border border-white/5">
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-tighter">Grupo</p>
-                                <p className="text-sm font-bold text-white">{event.subtitle}</p>
-                            </div>
-                            <div className="p-3 bg-background-dark/50 rounded-2xl border border-white/5">
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-tighter">Aula</p>
-                                <p className="text-sm font-bold text-white">{event.columnId} • P{event.floor}</p>
-                            </div>
+                        <div className="p-3 bg-background-dark/50 rounded-2xl border border-white/5">
+                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-tighter">Aula</p>
+                            <p className="text-sm font-bold text-white">{event.columnId} • P{event.floor}</p>
                         </div>
                     </div>
 

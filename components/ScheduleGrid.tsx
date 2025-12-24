@@ -83,23 +83,6 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
         </div>
 
         <div className="flex relative">
-          {/* Current Time Line */}
-          {currentTimeMinutes >= startOffsetMinutes && currentTimeMinutes <= END_HOUR * 60 && (
-            <div
-              className="absolute w-full z-20 flex items-center pointer-events-none"
-              style={{ top: `${currentTimeOffset}px` }}
-            >
-              <div className="w-14 md:w-20 text-right pr-2 sticky left-0 z-50">
-                <span className="text-[9px] md:text-[10px] font-bold text-primary bg-background-dark px-1 rounded inline-block">
-                  {formatTime(currentTimeMinutes)}
-                </span>
-              </div>
-              <div className="flex-1 h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
-                <div className="absolute -left-[3px] -top-[3px] size-2 rounded-full bg-primary"></div>
-              </div>
-            </div>
-          )}
-
           {/* Time Sidebar */}
           <div className="w-14 md:w-20 flex-none sticky left-0 z-30 bg-background-dark border-r border-border-green text-[10px] md:text-xs font-medium text-text-muted text-right select-none shadow-[1px_0_0_0_#326747]">
             {hours.map((hour) => (
@@ -115,6 +98,23 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
 
           {/* Grid Background Lines & Content */}
           <div className="flex flex-1 relative bg-background-dark">
+            {/* Current Time Line (Spanning all columns) */}
+            {currentTimeMinutes >= startOffsetMinutes && currentTimeMinutes <= END_HOUR * 60 && (
+              <div
+                className="absolute left-0 right-0 z-20 flex items-center pointer-events-none"
+                style={{ top: `${currentTimeOffset}px` }}
+              >
+                <div className="sticky left-0 z-50 -ml-14 md:-ml-20 w-14 md:w-20 text-right pr-2">
+                  <span className="text-[9px] md:text-[10px] font-bold text-primary bg-background-dark px-1 rounded inline-block">
+                    {formatTime(currentTimeMinutes)}
+                  </span>
+                </div>
+                <div className="flex-1 h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
+                  <div className="absolute -left-[3px] -top-[3px] size-2 rounded-full bg-primary"></div>
+                </div>
+              </div>
+            )}
+
             {/* Horizontal grid lines */}
             <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
               {hours.map((hour) => (

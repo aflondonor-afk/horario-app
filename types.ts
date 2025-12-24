@@ -23,6 +23,37 @@ export interface ScheduleEvent {
 export interface Column {
   id: string; // AULA
   title: string; // AULA name
-  subtitle: string; // Capacity or extra info (we might not have cap, so we'll use block info)
+  subtitle: string; // Capacity or extra info
   isAlternate?: boolean;
+}
+
+// Phase 2: Operational Models
+export interface User {
+  id: string;
+  username: string;
+  password?: string; // Only for local auth simulation
+}
+
+export type DayName = 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES' | 'SABADO' | 'DOMINGO';
+
+export interface Shift {
+  id: string;
+  userId: string;
+  block: string;
+  floor: number;
+  day: DayName;
+  startTime: string; // HH:mm
+  endTime: string;   // HH:mm
+  isTemporal: boolean;
+}
+
+export type ClassroomStatus = 'IN_USE' | 'FREE' | 'NONE';
+
+export interface OperationalLog {
+  id: string;
+  academicEventId: string;
+  date: string; // YYYY-MM-DD
+  status: ClassroomStatus;
+  updatedBy: string; // User ID
+  timestamp: number;
 }

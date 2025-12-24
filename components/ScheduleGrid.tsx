@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { START_HOUR, END_HOUR, PIXELS_PER_HOUR, PIXELS_PER_MINUTE } from '../constants';
 import EventCard from './EventCard';
-import { ScheduleEvent, Column } from '../types';
+import { ScheduleEvent, Column, ClassroomStatus as StatusType } from '../types';
 
 interface ScheduleGridProps {
   events: ScheduleEvent[];
   columns: Column[];
+  eventStatuses?: Record<string, StatusType>;
+  onEventClick?: (eventId: string, status: StatusType) => void;
+  isAssistantMode?: boolean;
 }
 
-const ScheduleGrid: React.FC<ScheduleGridProps> = ({ events, columns }) => {
+const ScheduleGrid: React.FC<ScheduleGridProps> = ({
+  events,
+  columns,
+  eventStatuses = {},
+  onEventClick,
+  isAssistantMode = false
+}) => {
   const [currentTimeMinutes, setCurrentTimeMinutes] = useState(0);
 
   useEffect(() => {
@@ -121,7 +130,13 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({ events, columns }) => {
                 className={`flex-1 min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
               >
                 {events.filter(e => e.columnId === col.id).map(event => (
-                  <EventCard key={event.id} event={event} />
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    status={eventStatuses[event.id]}
+                    onClick={onEventClick}
+                    isAssistantMode={isAssistantMode}
+                  />
                 ))}
               </div>
             ))}

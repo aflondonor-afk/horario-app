@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { START_HOUR, END_HOUR, PIXELS_PER_HOUR, PIXELS_PER_MINUTE } from '../constants';
 import EventCard from './EventCard';
+import EventDetailModal from './EventDetailModal';
 import { ScheduleEvent, Column, ClassroomStatus as StatusType } from '../types';
 
 interface ScheduleGridProps {
@@ -19,6 +20,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
   isAssistantMode = false
 }) => {
   const [currentTimeMinutes, setCurrentTimeMinutes] = useState(0);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   useEffect(() => {
     // Get real current time
@@ -38,6 +40,11 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
   const startOffsetMinutes = START_HOUR * 60;
   const currentTimeOffset = (currentTimeMinutes - startOffsetMinutes) * PIXELS_PER_MINUTE;
 
+  const selectedEvent = useMemo(() =>
+    events.find(e => e.id === selectedEventId),
+    [selectedEventId, events]
+  );
+
   // Format minutes into HH:mm
   const formatTime = (totalMinutes: number) => {
     const h = Math.floor(totalMinutes / 60);
@@ -47,13 +54,13 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
 
   return (
     <div className="flex-1 overflow-auto bg-background-dark relative" id="calendar-scroller">
-      <div className="min-w-[1000px] relative">
+      <div className="min-w-full md:min-w-[1000px] relative">
 
         {/* Sticky Header Row (Room Names) */}
         <div className="sticky top-0 z-40 flex bg-background-dark border-b border-border-green h-14 shadow-sm">
           {/* Top Left Corner */}
-          <div className="w-20 flex-none sticky left-0 z-50 bg-background-dark border-r border-border-green flex items-center justify-center shadow-[1px_0_0_0_#326747]">
-            <span className="text-xs text-text-muted font-bold">GMT-5</span>
+          <div className="w-14 md:w-20 flex-none sticky left-0 z-50 bg-background-dark border-r border-border-green flex items-center justify-center shadow-[1px_0_0_0_#326747]">
+            <span className="text-[10px] md:text-xs text-text-muted font-bold tracking-tighter">GMT-5</span>
           </div>
 
           {/* Column Headers */}
@@ -62,10 +69,9 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               columns.map((col) => (
                 <div
                   key={col.id}
-                  className={`flex-1 min-w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
+                  className={`flex-1 min-w-[20%] md:min-w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-1 md:px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
                 >
-                  <span className="text-white font-bold text-sm truncate w-full text-center">{col.title}</span>
-                  {/* Subtitle removed as per user request (redundant info) */}
+                  <span className="text-white font-bold text-[10px] md:text-sm truncate w-full text-center">{col.title}</span>
                 </div>
               ))
             ) : (
@@ -83,27 +89,23 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               className="absolute w-full z-20 flex items-center pointer-events-none"
               style={{ top: `${currentTimeOffset}px` }}
             >
-              <div className="w-20 text-right pr-2 sticky left-0 z-50">
-                <span className="text-[10px] font-bold text-primary bg-background-dark px-1 rounded inline-block">
+              <div className="w-14 md:w-20 text-right pr-2 sticky left-0 z-50">
+                <span className="text-[9px] md:text-[10px] font-bold text-primary bg-background-dark px-1 rounded inline-block">
                   {formatTime(currentTimeMinutes)}
                 </span>
               </div>
-              <div className="flex-1 h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative">
+              <div className="flex-1 min-w-[1000px] h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
                 <div className="absolute -left-[3px] -top-[3px] size-2 rounded-full bg-primary"></div>
               </div>
             </div>
           )}
 
           {/* Time Sidebar */}
-          <div className="w-20 flex-none sticky left-0 z-30 bg-background-dark border-r border-border-green text-xs font-medium text-text-muted text-right select-none shadow-[1px_0_0_0_#326747]">
+          <div className="w-14 md:w-20 flex-none sticky left-0 z-30 bg-background-dark border-r border-border-green text-[10px] md:text-xs font-medium text-text-muted text-right select-none shadow-[1px_0_0_0_#326747]">
             {hours.map((hour) => (
               <div key={hour} className="relative" style={{ height: `${PIXELS_PER_HOUR}px` }}>
-                <span className="absolute -top-2 right-3 leading-none">
+                <span className="absolute -top-2 right-2 md:right-3 leading-none">
                   {hour.toString().padStart(2, '0')}:00
-                </span>
-                {/* 30 min marker hidden by default as per image but structure exists */}
-                <span className="absolute top-[50%] -translate-y-1/2 right-3 leading-none hidden">
-                  {hour.toString().padStart(2, '0')}:30
                 </span>
               </div>
             ))}
@@ -116,10 +118,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
             {/* Horizontal grid lines */}
             <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
               {hours.map((hour) => (
-                <React.Fragment key={hour}>
-                  <div className="border-b border-border-green/20 w-full" style={{ height: `${PIXELS_PER_HOUR / 2}px` }}></div>
-                  <div className="border-b border-border-green/20 w-full border-dashed" style={{ height: `${PIXELS_PER_HOUR / 2}px` }}></div>
-                </React.Fragment>
+                <div key={hour} className="border-b border-border-green/20 w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
               ))}
             </div>
 
@@ -127,15 +126,15 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
             {columns.map((col) => (
               <div
                 key={col.id}
-                className={`flex-1 min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
+                className={`flex-1 min-w-[20%] md:min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
               >
                 {events.filter(e => e.columnId === col.id).map(event => (
                   <EventCard
                     key={event.id}
                     event={event}
                     status={eventStatuses[event.id]}
-                    onClick={onEventClick}
-                    isAssistantMode={isAssistantMode}
+                    onClick={() => setSelectedEventId(event.id)}
+                    isAssistantMode={true} // Enable clicking to open modal
                   />
                 ))}
               </div>
@@ -149,8 +148,20 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
           </div>
         </div>
       </div>
+
+      {selectedEvent && (
+        <EventDetailModal
+          event={selectedEvent}
+          status={eventStatuses[selectedEvent.id] || 'NONE'}
+          isOpen={!!selectedEventId}
+          onClose={() => setSelectedEventId(null)}
+          onStatusChange={onEventClick}
+          isAssistantMode={isAssistantMode}
+        />
+      )}
     </div>
   );
 };
+
 
 export default ScheduleGrid;

@@ -54,7 +54,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
 
   return (
     <div className="flex-1 overflow-auto bg-background-dark relative" id="calendar-scroller">
-      <div className="min-w-full md:min-w-[1000px] relative">
+      <div className="w-fit min-w-full relative">
 
         {/* Sticky Header Row (Room Names) */}
         <div className="sticky top-0 z-40 flex bg-background-dark border-b border-border-green h-14 shadow-sm">
@@ -69,7 +69,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               columns.map((col) => (
                 <div
                   key={col.id}
-                  className={`flex-1 min-w-[20%] md:min-w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-1 md:px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
+                  className={`flex-1 min-w-[25%] md:min-w-[180px] border-r border-border-green/30 flex flex-col justify-center items-center px-1 md:px-2 ${col.isAlternate ? 'bg-surface-dark/30' : ''}`}
                 >
                   <span className="text-white font-bold text-[10px] md:text-sm truncate w-full text-center">{col.title}</span>
                 </div>
@@ -94,7 +94,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                   {formatTime(currentTimeMinutes)}
                 </span>
               </div>
-              <div className="flex-1 min-w-[1000px] h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
+              <div className="flex-1 h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
                 <div className="absolute -left-[3px] -top-[3px] size-2 rounded-full bg-primary"></div>
               </div>
             </div>
@@ -126,7 +126,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
             {columns.map((col) => (
               <div
                 key={col.id}
-                className={`flex-1 min-w-[20%] md:min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
+                className={`flex-1 min-w-[25%] md:min-w-[180px] border-r border-border-green/30 relative z-10 ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
               >
                 {events.filter(e => e.columnId === col.id).map(event => (
                   <EventCard

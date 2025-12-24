@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ScheduleEvent, ClassroomStatus as StatusType } from '../types';
 
 interface EventDetailModalProps {
@@ -10,7 +10,7 @@ interface EventDetailModalProps {
     isAssistantMode?: boolean;
 }
 
-const EventDetailModal: React.FC<EventDetailModalProps> = ({
+const EventDetailModal: React.FC<EventDetailModalProps> = memo(({
     event,
     status,
     isOpen,
@@ -107,6 +107,6 @@ const EventDetailModal: React.FC<EventDetailModalProps> = ({
             </div>
         </div>
     );
-};
+});
 
 export default EventDetailModal;

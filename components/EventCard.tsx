@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ScheduleEvent, ClassroomStatus as StatusType } from '../types';
 import { PIXELS_PER_MINUTE, START_HOUR } from '../constants';
 
@@ -9,17 +9,7 @@ interface EventCardProps {
   isAssistantMode?: boolean;
 }
 
-const colorStyles = {
-  primary: 'border-primary',
-  indigo: 'border-indigo-500',
-  pink: 'border-pink-500',
-  orange: 'border-orange-500',
-  teal: 'border-teal-500',
-  red: 'border-red-500',
-  purple: 'border-purple-500',
-};
-
-const EventCard: React.FC<EventCardProps> = ({ event, status = 'NONE', onClick, isAssistantMode = false }) => {
+const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onClick, isAssistantMode = false }) => {
   const parseTime = (time: string) => {
     const [h, m] = time.split(':').map(Number);
     return h * 60 + m;
@@ -34,22 +24,23 @@ const EventCard: React.FC<EventCardProps> = ({ event, status = 'NONE', onClick, 
 
   const getStatusStyles = () => {
     switch (status) {
-      case 'IN_USE': return 'bg-green-500/20 border-green-500 !opacity-100';
-      case 'FREE': return 'bg-red-500/20 border-red-500 !opacity-100';
-      default: return 'bg-surface-dark border-white/10 opacity-40';
+      case 'IN_USE': return 'bg-green-500/20 border-green-500 !opacity-100 shadow-[0_0_10px_rgba(34,197,94,0.1)]';
+      case 'FREE': return 'bg-red-500/20 border-red-500 !opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
+      default: return 'bg-surface-dark border-white/10 opacity-60';
     }
   };
 
-  const handleClick = () => {
-    if (!isAssistantMode || !onClick) return;
-    const nextStatus: StatusType = status === 'NONE' ? 'IN_USE' : status === 'IN_USE' ? 'FREE' : 'NONE';
-    onClick(event.id, nextStatus);
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onClick) {
+      onClick(event.id, status);
+    }
   };
 
   return (
     <div
       onClick={handleClick}
-      className={`absolute left-1 right-1 rounded-lg border-l-[3px] p-2.5 shadow-md transition-all flex flex-col overflow-hidden ${getStatusStyles()} ${isAssistantMode ? 'cursor-pointer active:scale-95 hover:z-30' : 'pointer-events-none'}`}
+      className={`absolute left-0.5 right-0.5 rounded-[4px] border-l-[3px] p-1 shadow-md transition-all flex flex-col overflow-hidden ${getStatusStyles()} cursor-pointer active:scale-95 hover:z-30`}
       style={{
         top: `${startOffset}px`,
         height: `${height}px`,
@@ -57,7 +48,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, status = 'NONE', onClick, 
       }}
     >
       <div className="flex justify-between items-start mb-0.5">
-        <h3 className="text-white font-bold text-[9px] md:text-[11px] leading-tight line-clamp-3 uppercase tracking-tight md:tracking-wide">{event.title}</h3>
+        <h3 className="text-white font-bold text-[9px] md:text-[11px] leading-[1.1] line-clamp-4 uppercase tracking-normal">
+          {event.title}
+        </h3>
         {status !== 'NONE' && (
           <span className={`size-1.5 md:size-2 rounded-full shrink-0 ${status === 'IN_USE' ? 'bg-green-500' : 'bg-red-500'} animate-pulse`}></span>
         )}
@@ -81,6 +74,6 @@ const EventCard: React.FC<EventCardProps> = ({ event, status = 'NONE', onClick, 
       </div>
     </div>
   );
-};
+});
 
 export default EventCard;

@@ -40,7 +40,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onCl
   return (
     <div
       onClick={handleClick}
-      className={`absolute left-0.5 right-0.5 rounded-[4px] border-l-[3px] p-1 shadow-md transition-all flex flex-col overflow-hidden ${getStatusStyles()} cursor-pointer active:scale-95 hover:z-30 will-change-transform`}
+      className={`absolute left-0.5 right-0.5 rounded-[4px] border-l-[3px] p-1 shadow-md transition-transform flex flex-col overflow-hidden ${getStatusStyles()} cursor-pointer active:scale-95 hover:z-30 will-change-transform`}
       style={{
         top: `${startOffset}px`,
         height: `${height}px`,

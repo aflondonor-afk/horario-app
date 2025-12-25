@@ -45,6 +45,15 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
     [selectedEventId, events]
   );
 
+  const eventsByColumn = useMemo(() => {
+    const grouped: Record<string, ScheduleEvent[]> = {};
+    events.forEach(event => {
+      if (!grouped[event.columnId]) grouped[event.columnId] = [];
+      grouped[event.columnId].push(event);
+    });
+    return grouped;
+  }, [events]);
+
   // Format minutes into HH:mm
   const formatTime = (totalMinutes: number) => {
     const h = Math.floor(totalMinutes / 60);
@@ -97,14 +106,14 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
           </div>
 
           {/* Grid Area */}
-          <div className="relative bg-background-dark overflow-visible">
-            {/* Horizontal grid lines */}
-            <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
-              {hours.map((hour) => (
-                <div key={hour} className="border-b border-white/[0.03] w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
-              ))}
-            </div>
-
+          <div
+            className="relative bg-background-dark overflow-visible"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+              backgroundSize: `100% ${PIXELS_PER_HOUR}px`,
+              willChange: 'transform'
+            }}
+          >
             {/* Current Time Line (Relative to columns area) */}
             {currentTimeMinutes >= startOffsetMinutes && currentTimeMinutes <= END_HOUR * 60 && (
               <div
@@ -116,7 +125,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                     {formatTime(currentTimeMinutes)}
                   </span>
                 </div>
-                <div className="flex-1 h-[2px] bg-primary shadow-[0_0_8px_rgba(43,238,121,0.6)] relative overflow-visible">
+                <div className="flex-1 h-[2px] bg-primary relative overflow-visible">
                   <div className="absolute -left-[3px] -top-[3px] size-2 rounded-full bg-primary"></div>
                 </div>
               </div>
@@ -127,9 +136,9 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
               {columns.map((col) => (
                 <div
                   key={col.id}
-                  className={`flex-none w-[25vw] md:w-[180px] border-r border-border-green/30 relative ${col.isAlternate ? 'bg-surface-dark/10' : ''}`}
+                  className={`flex-none w-[25vw] md:w-[180px] border-r border-white/5 relative ${col.isAlternate ? 'bg-white/[0.02]' : ''}`}
                 >
-                  {events.filter(e => e.columnId === col.id).map(event => (
+                  {(eventsByColumn[col.id] || []).map(event => (
                     <EventCard
                       key={event.id}
                       event={event}
@@ -143,7 +152,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
 
               {/* Empty state filler if no columns */}
               {columns.length === 0 && (
-                <div className="w-[100vw] h-[800px] flex items-center justify-center text-text-muted/50 text-4xl font-bold uppercase select-none">
+                <div className="w-[100vw] h-[800px] flex items-center justify-center text-text-muted/20 text-4xl font-bold uppercase select-none">
                   Sin Datos
                 </div>
               )}

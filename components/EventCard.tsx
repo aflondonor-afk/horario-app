@@ -24,9 +24,9 @@ const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onCl
 
   const getStatusStyles = () => {
     switch (status) {
-      case 'IN_USE': return 'bg-green-500/40 border-green-500 !opacity-100 shadow-[0_0_10px_rgba(34,197,94,0.1)] backdrop-blur-sm';
-      case 'FREE': return 'bg-red-500/40 border-red-500 !opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.1)] backdrop-blur-sm';
-      default: return 'bg-surface-dark/95 border-white/10 opacity-100 backdrop-blur-sm';
+      case 'IN_USE': return 'bg-[#1a4d2e] border-green-500 !opacity-100 shadow-[0_0_10px_rgba(34,197,94,0.1)]';
+      case 'FREE': return 'bg-[#4d1a1a] border-red-500 !opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
+      default: return 'bg-[#121212] border-white/10 opacity-100';
     }
   };
 
@@ -40,7 +40,7 @@ const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onCl
   return (
     <div
       onClick={handleClick}
-      className={`absolute left-0.5 right-0.5 rounded-[4px] border-l-[3px] p-1 shadow-md transition-all flex flex-col overflow-hidden ${getStatusStyles()} cursor-pointer active:scale-95 hover:z-30`}
+      className={`absolute left-0.5 right-0.5 rounded-[4px] border-l-[3px] p-1 shadow-md transition-all flex flex-col overflow-hidden ${getStatusStyles()} cursor-pointer active:scale-95 hover:z-30 will-change-transform`}
       style={{
         top: `${startOffset}px`,
         height: `${height}px`,

@@ -24,9 +24,9 @@ const EventCard: React.FC<EventCardProps> = memo(({ event, status = 'NONE', onCl
 
   const getStatusStyles = () => {
     switch (status) {
-      case 'IN_USE': return 'bg-green-500/20 border-green-500 !opacity-100 shadow-[0_0_10px_rgba(34,197,94,0.1)]';
-      case 'FREE': return 'bg-red-500/20 border-red-500 !opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.1)]';
-      default: return 'bg-surface-dark border-white/10 opacity-60';
+      case 'IN_USE': return 'bg-green-500/40 border-green-500 !opacity-100 shadow-[0_0_10px_rgba(34,197,94,0.1)] backdrop-blur-sm';
+      case 'FREE': return 'bg-red-500/40 border-red-500 !opacity-100 shadow-[0_0_10px_rgba(239,68,68,0.1)] backdrop-blur-sm';
+      default: return 'bg-surface-dark/95 border-white/10 opacity-100 backdrop-blur-sm';
     }
   };
 

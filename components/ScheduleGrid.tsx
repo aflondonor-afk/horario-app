@@ -101,7 +101,7 @@ const ScheduleGrid: React.FC<ScheduleGridProps> = ({
             {/* Horizontal grid lines */}
             <div className="absolute inset-0 z-0 flex flex-col pointer-events-none">
               {hours.map((hour) => (
-                <div key={hour} className="border-b border-white/20 w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
+                <div key={hour} className="border-b border-white/[0.03] w-full" style={{ height: `${PIXELS_PER_HOUR}px` }}></div>
               ))}
             </div>
 

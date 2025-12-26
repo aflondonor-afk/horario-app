@@ -1,0 +1,18 @@
+{
+    "short_name": "SalasH",
+    "name": "Salas Híbridas UT",
+    "description": "Gestión de asistencias administrativas y aulas en tiempo real - Universidad del Tolima",
+    "icons": [
+        {
+            "src": "assets/logo_ut.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "start_url": "./index.html",
+    "display": "standalone",
+    "theme_color": "#01160c",
+    "background_color": "#01160c",
+    "orientation": "portrait"
+}
